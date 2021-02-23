@@ -1,0 +1,8 @@
+{
+  "name": "lovebox-lambda",
+  "version": "1.0.0",
+  "description": "Send messages to The Girl using the automation.",
+  "main": "index.js",
+  "author": "Swizec Teller <swizec@swizec.com>",
+  "license": "MIT"
+}

@@ -1,0 +1,64 @@
+service: serverless-auth-example
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  environment:
+    USER_TABLE: ${self:service}-users-${self:provider.stage}
+    SALT: someRandomSecretString_pleaseUseProperSecrets:)
+    JWT_SECRET: useRealSecretsManagementPlease
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USER_TABLE}"
+
+functions:
+  login:
+    handler: dist/auth.login
+    events:
+      - http:
+          path: login
+          method: POST
+          cors: true
+  verify:
+    handler: dist/auth.verify
+    events:
+      - http:
+          path: verify
+          method: POST
+          cors: true
+  privateHello:
+    handler: dist/private.hello
+    events:
+      - http:
+          path: private
+          method: GET
+          cors: true
+
+resources:
+  Resources:
+    UsersTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.USER_TABLE}
+
+package:
+  exclude:
+    - node_modules/typescript/**
+    - node_modules/@types/**
