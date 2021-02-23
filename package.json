@@ -1,8 +1,23 @@
 {
-  "name": "lovebox-lambda",
-  "version": "1.0.0",
-  "description": "Send messages to The Girl using the automation.",
-  "main": "index.js",
-  "author": "Swizec Teller <swizec@swizec.com>",
-  "license": "MIT"
+    "name": "lovebox-lambda",
+    "version": "1.0.0",
+    "description": "Send messages to The Girl using the automation.",
+    "main": "index.js",
+    "author": "Swizec Teller <swizec@swizec.com>",
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc",
+        "deploy": "npm run build && serverless deploy"
+    },
+    "dependencies": {
+        "@types/aws-lambda": "^8.10.72",
+        "@types/node": "^14.14.31",
+        "aws-lambda": "^1.0.6",
+        "graphql": "^15.5.0",
+        "graphql-request": "^3.4.0",
+        "typescript": "^4.1.5"
+    },
+    "engines": {
+        "node": "12.x || 14.x"
+    }
 }
