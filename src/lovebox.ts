@@ -1,6 +1,6 @@
 import { request, gql, GraphQLClient } from "graphql-request";
 import { S3 } from "aws-sdk";
-import { getBearerToken } from "./secrets";
+import { getBearerToken, getRecipient } from "./secrets";
 import { getPicture } from "./pictures";
 
 let graphQLClient: null | GraphQLClient = null;
@@ -24,12 +24,12 @@ async function createGraphQLClient() {
 }
 
 async function sendPicture(picture: S3.GetObjectOutput) {
-    console.log(picture.ContentType);
-
     const base64 = `data:${picture.ContentType};base64,${picture.Body?.toString(
         "base64"
     )}`;
     const client = await createGraphQLClient();
+    const { recipient, deviceId } = await getRecipient();
+
     const res = await client.request(
         gql`
             mutation sendPixNote(
@@ -62,11 +62,11 @@ async function sendPicture(picture: S3.GetObjectOutput) {
         `,
         {
             base64,
-            recipient: "5ff7ef4e4d725e005bac24f0",
+            recipient,
             contentType: ["Image"],
             options: {
                 framesBase64: null,
-                deviceId: "3DDA5D3B-8EF4-4F82-8634-62F245D082C2",
+                deviceId,
             },
         }
     );
