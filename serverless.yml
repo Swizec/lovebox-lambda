@@ -9,10 +9,16 @@ provider:
           Action:
               - "secretsmanager:GetSecretValue"
           Resource: "arn:aws:secretsmanager:${self:provider.region}:*"
+        - Effect: "Allow"
+          Action:
+              - "s3:listObjects"
+          Resource: "arn:aws:s3:::lovebox-stash/*"
 
 functions:
     sendNote:
         handler: dist/lovebox.sendNote
+        events:
+            - schedule: rate(1 day)
 
 package:
     exclude:
