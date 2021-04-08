@@ -24,11 +24,15 @@ async function createGraphQLClient() {
 }
 
 async function sendPicture(picture: S3.GetObjectOutput) {
+    console.log("sending pic");
     const base64 = `data:${picture.ContentType};base64,${picture.Body?.toString(
         "base64"
     )}`;
     const client = await createGraphQLClient();
+    console.log("got client");
     const { recipient, deviceId } = await getRecipient();
+
+    console.log("got recipient");
 
     const res = await client.request(
         gql`
