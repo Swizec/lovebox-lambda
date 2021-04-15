@@ -21,7 +21,7 @@ functions:
     sendNote:
         handler: dist/lovebox.sendNote
         events:
-            - schedule: rate(1 day)
+            - schedule: rate(12 hours)
 
 package:
     exclude:

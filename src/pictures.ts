@@ -15,24 +15,19 @@ async function listPictures() {
 }
 
 export async function getPicture() {
-    console.log("listing pictures");
     const pictures = await listPictures();
 
     if (pictures) {
-        console.log("got pictures");
-
         const randomPic = pictures[Math.floor(Math.random() * pictures.length)];
-        console.log(randomPic);
 
         if (randomPic.Key) {
-            console.log("getting imageData");
             const imageData = await s3
                 .getObject({
                     Bucket: "lovebox-stash",
                     Key: randomPic.Key,
                 })
                 .promise();
-            console.log("got image");
+
             return imageData;
         }
     }
