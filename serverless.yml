@@ -13,6 +13,7 @@ provider:
           Action:
               - "s3:ListBucket"
               - "s3:GetObject"
+              - "s3:PutObject"
           Resource:
               - "arn:aws:s3:::lovebox-stash"
               - "arn:aws:s3:::lovebox-stash/*"
@@ -22,6 +23,14 @@ functions:
         handler: dist/lovebox.sendNote
         events:
             - schedule: rate(12 hours)
+
+    presignedUrl:
+        handler: dist/presignedUrl.getUrl
+        events:
+            - http:
+                  path: presignedurl
+                  method: GET
+                  cors: true
 
 package:
     exclude:
